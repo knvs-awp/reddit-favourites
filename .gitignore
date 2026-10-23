@@ -1,0 +1,19 @@
+# Dependencies and generated output
+node_modules/
+dist/
+coverage/
+.vite/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*.local
+
+# Debug logs and operating system files
+*.log
+.DS_Store
+Thumbs.db
+
+# Generated assignment deliverables
+/submission/
