@@ -1,7 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchHotPosts } from '../api/reddit.js';
 
 export function useHotPosts(subreddit) {
+  const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
   // request hot posts when the selected subreddit changes
   useEffect(() => {
     if (!subreddit) return;
@@ -9,14 +13,28 @@ export function useHotPosts(subreddit) {
     const controller = new AbortController();
 
     async function loadHotPosts() {
+      setIsLoading(true);
+      setError('');
+      setPosts([]);
+
       try {
         // the API module handles the request and this hook inspects the result
         const data = await fetchHotPosts(subreddit, controller.signal);
-        console.log('Reddit hot posts:', data);
+
+        // each child contains one post, keep its data for the list to display
+        if (!controller.signal.aborted) {
+          setPosts(data.data.children.map((child) => child.data));
+        }
       } catch (error) {
         // cancellation is expected when switching subreddits or leaving the component
-        if (error.name !== 'AbortError') {
+        if (error.name !== 'AbortError' && !controller.signal.aborted) {
           console.error('Could not fetch Reddit posts:', error);
+          setError(`Could not load posts: ${error.message}`);
+        }
+      } finally {
+        // an old request should not change the loading state of a newer request
+        if (!controller.signal.aborted) {
+          setIsLoading(false);
         }
       }
     }
@@ -28,4 +46,6 @@ export function useHotPosts(subreddit) {
     // r/reactjs to r/javascript can cancel the old subreddit's request before it returns outdated posts
     return () => controller.abort();
   }, [subreddit]);
+
+  return { posts, isLoading, error };
 }
