@@ -9,6 +9,6 @@ export async function fetchHotPosts(subreddit, signal) {
     throw new Error(`Reddit returned HTTP ${response.status}`);
   }
 
-  // Return the JSON body
+  // return the JSON body
   return response.json();
 }
