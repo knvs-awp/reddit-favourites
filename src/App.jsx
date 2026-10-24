@@ -1,31 +1,17 @@
-import { useEffect } from 'react';
-import { fetchHotPosts } from './api/reddit.js';
+import { useState } from 'react';
+import SubredditForm from './components/SubredditForm.jsx';
+import { useHotPosts } from './hooks/useHotPosts.js';
 
 export default function App() {
-  // request hot posts when this component mounts
-  useEffect(() => {
-    const controller = new AbortController();
+  const [subreddit, setSubreddit] = useState('');
 
-    async function loadHotPosts() {
-      try {
-        // the API module handles the request and this component inspects the result
-        const data = await fetchHotPosts('reactjs', controller.signal);
-        console.log('Reddit hot posts:', data);
-      } catch (error) {
-        // cancelled requests are expected during react's development checks
-        if (error.name !== 'AbortError') {
-          console.error('Could not fetch Reddit posts:', error);
-        }
-      }
-    }
+  // connect the form to the hook, which handles requests and cancellation
+  useHotPosts(subreddit);
 
-    loadHotPosts();
-
-    // cancel unfinished work if the component unmounts or the effect restarts
-    // later, when the selected subreddit is an effect dependency, switching from
-    // r/reactjs to r/javascript can cancel the old subreddit's request before it returns outdated posts
-    return () => controller.abort();
-  }, []);
-
-  return <h1>Reddit favourites</h1>;
+  return (
+    <main>
+      <h1>Reddit favourites</h1>
+      <SubredditForm onSearch={setSubreddit} />
+    </main>
+  );
 }
