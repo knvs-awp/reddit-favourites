@@ -6,3 +6,8 @@
 - deploy publicly via vercel ig 
 - record the demo
 - zip the source without node_modules
+
+## references
+
+- [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS)
+- [Web Storage API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API)
