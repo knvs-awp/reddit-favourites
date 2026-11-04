@@ -1,5 +1,7 @@
 # Reddit favourites
 
+[Open the app on Reddit](https://www.reddit.com/r/a1_awf_dev/comments/1xg0fyi/reddit_favourites/)
+
 Browse a subreddit's 10 hot posts + keep favourites from multiple subreddits. Only post IDs are saved in `localStorage`. Details are fetched again after a refresh.
 
 ## setup
