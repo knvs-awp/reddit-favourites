@@ -12,19 +12,21 @@ export default function SubredditForm({ onSearch }) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="subreddit">Subreddit </label>
-      <input
-        id="subreddit"
-        name="subreddit"
-        value={subreddit}
-        onChange={(event) => setSubreddit(event.target.value)}
-        placeholder="reactjs"
-        pattern="([rR]/)?[a-zA-Z0-9_]+"
-        title="Enter a subreddit name such as reactjs or r/reactjs"
-        required
-      />{' '}
-      <button type="submit">Load posts</button>
+    <form className="subreddit-form" onSubmit={handleSubmit}>
+      <label htmlFor="subreddit">Subreddit</label>
+      <div className="search-row">
+        <input
+          id="subreddit"
+          name="subreddit"
+          value={subreddit}
+          onChange={(event) => setSubreddit(event.target.value)}
+          placeholder="e.g. reactjs"
+          pattern="([rR]/)?[a-zA-Z0-9_]+"
+          title="Enter a subreddit name such as reactjs or r/reactjs"
+          required
+        />
+        <button type="submit">Load posts</button>
+      </div>
     </form>
   );
 }

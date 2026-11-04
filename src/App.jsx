@@ -19,16 +19,20 @@ export default function App() {
   const { posts, isLoading, error } = useHotPosts(subreddit);
 
   return (
-    <main>
-      <h1>Reddit favourites</h1>
+    <main className="app">
+      <header className="app-header">
+        <h1>Reddit favourites</h1>
+        <a href="#favourites">Saved ({favouriteIds.length})</a>
+      </header>
       <SubredditForm onSearch={setSubreddit} />
-      {/* show loading, errors or posts after a subreddit is selected */}
-      {subreddit && (
-        <section>
-          <h2>Hot posts in r/{subreddit}</h2>
-          {isLoading && <p role="status">Loading posts...</p>}
-          {error && <p role="alert">{error}</p>}
-          {!isLoading && !error && (
+      <div className="content">
+        {/* show loading, errors or posts after a subreddit is selected */}
+        <section aria-labelledby="hot-posts-title">
+          <h2 id="hot-posts-title">{subreddit ? `Hot posts in r/${subreddit}` : 'Hot posts'}</h2>
+          {!subreddit && <p className="notice">Enter a subreddit to load posts.</p>}
+          {subreddit && isLoading && <p className="notice" role="status">Loading posts...</p>}
+          {subreddit && error && <p className="notice" role="alert">{error}</p>}
+          {subreddit && !isLoading && !error && (
             <PostList
               posts={posts}
               favouriteIds={favouriteIds}
@@ -36,21 +40,21 @@ export default function App() {
             />
           )}
         </section>
-      )}
-      <section>
-        <h2>Favourites</h2>
-        {favouritesLoading && <p role="status">Loading favourites...</p>}
-        {favouritesError && <p role="alert">{favouritesError}</p>}
-        {favouriteIds.length === 0 && <p>No favourites yet</p>}
-        {unavailableCount > 0 && <p>Some favourite posts are currently unavailable.</p>}
-        {favourites.length > 0 && (
-          <PostList
-            posts={favourites}
-            favouriteIds={favouriteIds}
-            onToggleFavourite={toggleFavourite}
-          />
-        )}
-      </section>
+        <section id="favourites" aria-labelledby="favourites-title">
+          <h2 id="favourites-title">Favourites</h2>
+          {favouritesLoading && <p className="notice" role="status">Loading favourites...</p>}
+          {favouritesError && <p className="notice" role="alert">{favouritesError}</p>}
+          {favouriteIds.length === 0 && <p className="notice">No favourites yet</p>}
+          {unavailableCount > 0 && <p className="notice">Some favourite posts are currently unavailable.</p>}
+          {favourites.length > 0 && (
+            <PostList
+              posts={favourites}
+              favouriteIds={favouriteIds}
+              onToggleFavourite={toggleFavourite}
+            />
+          )}
+        </section>
+      </div>
     </main>
   );
 }
