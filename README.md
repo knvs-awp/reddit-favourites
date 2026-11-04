@@ -1,6 +1,6 @@
 # Reddit favourites
 
-Browse a subreddit's 10 hot posts + keep favourites from multiple subreddits. Only post IDs are saved in `localStorage`; details are fetched again after a refresh.
+Browse a subreddit's 10 hot posts + keep favourites from multiple subreddits. Only post IDs are saved in `localStorage`. Details are fetched again after a refresh.
 
 ## setup
 

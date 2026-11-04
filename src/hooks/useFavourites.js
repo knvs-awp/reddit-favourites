@@ -23,7 +23,7 @@ export function useFavourites() {
 
   useEffect(() => {
     try {
-      // store only IDs; titles, scores and links stay in memory
+      // store only IDs. keep post details in memory
       localStorage.setItem(STORAGE_KEY, JSON.stringify(favouriteIds));
       setStorageError('');
     } catch {
