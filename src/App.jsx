@@ -6,7 +6,14 @@ import { useHotPosts } from './hooks/useHotPosts.js';
 
 export default function App() {
   const [subreddit, setSubreddit] = useState('');
-  const { favourites, toggleFavourite } = useFavourites();
+  const {
+    favourites,
+    favouriteIds,
+    toggleFavourite,
+    isLoading: favouritesLoading,
+    error: favouritesError,
+    unavailableCount,
+  } = useFavourites();
 
   // connect the form to the hook, which handles requests and cancellation
   const { posts, isLoading, error } = useHotPosts(subreddit);
@@ -24,7 +31,7 @@ export default function App() {
           {!isLoading && !error && (
             <PostList
               posts={posts}
-              favourites={favourites}
+              favouriteIds={favouriteIds}
               onToggleFavourite={toggleFavourite}
             />
           )}
@@ -32,12 +39,14 @@ export default function App() {
       )}
       <section>
         <h2>Favourites</h2>
-        {favourites.length === 0 ? (
-          <p>No favourites yet</p>
-        ) : (
+        {favouritesLoading && <p role="status">Loading favourites...</p>}
+        {favouritesError && <p role="alert">{favouritesError}</p>}
+        {favouriteIds.length === 0 && <p>No favourites yet</p>}
+        {unavailableCount > 0 && <p>Some favourite posts are currently unavailable.</p>}
+        {favourites.length > 0 && (
           <PostList
             posts={favourites}
-            favourites={favourites}
+            favouriteIds={favouriteIds}
             onToggleFavourite={toggleFavourite}
           />
         )}

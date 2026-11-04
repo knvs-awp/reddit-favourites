@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchHotPosts } from '../api/reddit.js';
+import { fetchHotPosts } from '../lib/reddit.js';
 
 export function useHotPosts(subreddit) {
   const [posts, setPosts] = useState([]);
@@ -21,9 +21,9 @@ export function useHotPosts(subreddit) {
         // the API module handles the request and this hook inspects the result
         const data = await fetchHotPosts(subreddit, controller.signal);
 
-        // each child contains one post, keep its data for the list to display
+        // the server returns the post fields needed by the list
         if (!controller.signal.aborted) {
-          setPosts(data.data.children.map((child) => child.data));
+          setPosts(data.posts);
         }
       } catch (error) {
         // cancellation is expected when switching subreddits or leaving the component

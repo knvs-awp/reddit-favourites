@@ -1,4 +1,6 @@
-export default function PostList({ posts, favourites, onToggleFavourite }) {
+import { navigateTo } from '@devvit/web/client';
+
+export default function PostList({ posts, favouriteIds, onToggleFavourite }) {
   if (posts.length === 0) {
     return <p>No posts found</p>;
   }
@@ -6,7 +8,7 @@ export default function PostList({ posts, favourites, onToggleFavourite }) {
   return (
     <ul>
       {posts.map((post) => {
-        const isFavourite = favourites.some((favourite) => favourite.id === post.id);
+        const isFavourite = favouriteIds.includes(post.id);
 
         return (
           <li key={post.id}>
@@ -14,7 +16,16 @@ export default function PostList({ posts, favourites, onToggleFavourite }) {
             <p>Score: {post.score}</p>
             {/* permalink that we got from the API response
             leads to the comments page, the post URL may lead to another website */}
-            <a href={`https://www.reddit.com${post.permalink}`}>View post and comments</a>{' '}
+            <a
+              href={`https://www.reddit.com${post.permalink}`}
+              onClick={(event) => {
+                event.preventDefault();
+                // open the comments page outside the app's frame
+                navigateTo(`https://www.reddit.com${post.permalink}`);
+              }}
+            >
+              View post and comments
+            </a>{' '}
             <button
               type="button"
               aria-pressed={isFavourite}
